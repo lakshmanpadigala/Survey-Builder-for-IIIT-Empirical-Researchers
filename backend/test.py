@@ -1,3 +1,3 @@
 from datetime import datetime
+print("hello")
 print("test doc!")
-print("hello world")
