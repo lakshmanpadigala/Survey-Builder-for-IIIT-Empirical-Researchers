@@ -1,0 +1,91 @@
+<!doctype html>
+
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>pyChart Survey System :: Question Pool</title>
+
+	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+	<link rel="stylesheet" href="/static/css/styles.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+
+</head>
+<body>
+
+   <div id="main">
+
+
+       <div class="header">
+           <h1>pyChart</h1>
+           <h2>A python/flask Survey System created with <i class="fa fa-pie-chart"></i> in mind.</h2>
+
+           <div class="pure-menu pure-menu-horizontal">
+				<a href="/" class="pure-menu-heading pure-menu-link"><i class="fa fa-home"></i> DASHBOARD</a>
+				<ul class="pure-menu-list">
+					<li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+						<a class="pure-menu-link"><i class="fa fa-question"></i> Questions</a></a>
+						<ul class="pure-menu-children">
+							<li class="pure-menu-item"><a href="/questions/add" class="pure-menu-link"><i class="fa fa-plus"></i> Add</a></li>
+							<li class="pure-menu-item"><a href="/questions" class="pure-menu-link"><i class="fa fa-eye"></i> View</a></li>
+						</ul>
+					</li>
+					<li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+						<a class="pure-menu-link"><i class="fa fa-comments"></i> Surveys</a></a>
+						<ul class="pure-menu-children">
+							<li class="pure-menu-item"><a href="/surveys/create" class="pure-menu-link"><i class="fa fa-plus"></i> Add</a></li>
+							<li class="pure-menu-item"><a href="/surveys" class="pure-menu-link"><i class="fa fa-eye"></i> View</a></li>
+						</ul>
+					</li>
+					<li class="pure-menu-item"><a href="/logout" class="pure-menu-link"><i class="fa fa-sign-out"></i> Logout</a></li>
+				</ul>
+			</div>
+       </div>
+
+       <div class="content">
+
+
+
+           {% if error == 0 %}<br><p style="color: red;">The application could not complete your request at this moment. Please try again later.</p>{% endif %}
+           {% if error == 1 %}<br><p style="color: red;">The question could not be deleted. Please try again later.</p>{% endif %}
+           {% if success %}<br><p style="color: green;">The question has been deleted successfully.</p>{% endif %}
+
+           <h2 class="content-subhead"><i class="fa fa-asterisk"></i> Mandatory Question Pool</h2>
+
+           {% if mandatory_questions %}
+           <table class="pure-table pure-table-horizontal">
+               <thead>
+                   <tr><th>Question</th><th>Type</th><th>Responses</th><th></th></tr>
+               </thead>
+               <tbody>
+                   {% for question in mandatory_questions %}
+                   <tr><td>{{ question.text }}</td><td>{% if question.type == 1%}MCQ</td><td>{% for response in question.responsesList() %} {{ loop.index }}. {{ response }} {{ "// " if not loop.last }} {% endfor %} {% else %}Text</td><td>-- Free response -- {% endif %}</td><td><a class="pure-button" href="questions/delete/{{ question.id }}"><i class="fa fa-trash"></i></a></td></tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+           {% else %}
+           <p>There are no mandatory questions currently in the pool. Please add a question first.</p>
+           {% endif %}
+
+           <h2 class="content-subhead"><i class="fa fa-balance-scale"></i> Optional Question Pool</h2>
+
+           {% if optional_questions %}
+           <table class="pure-table pure-table-horizontal">
+               <thead>
+                   <tr><th>Question</th><th>Type</th><th>Responses</th><th></th></tr>
+               </thead>
+               <tbody>
+                   {% for question in optional_questions %}
+                   <tr><td>{{ question.text }}</td><td>{% if question.type == 1%}MCQ</td><td>{% for response in question.responsesList() %} {{ loop.index }}. {{ response }} {{ "// " if not loop.last }} {% endfor %} {% else %}Text</td><td>-- Free response -- {% endif %}</td><td><a class="pure-button" href="questions/delete/{{ question.id }}"><i class="fa fa-trash"></i></a></td></tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+           {% else %}
+           <p>There are no optional questions currently in the pool. Please add a question first.</p>
+           {% endif %}
+        </div>
+   </div>
+
+</body>
+</html>
